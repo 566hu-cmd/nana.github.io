@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鸡蛋超人无抗小课堂 - GitHub Pages版本</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .screen {
+            padding: 30px 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 600px;
+        }
+        
+        .active {
+            display: flex;
+        }
+        
+        h1 {
+            color: #e53935;
+            margin-bottom: 15px;
+            font-size: 32px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        p {
+            color: #34495e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 18px;
+            max-width: 90%;
+        }
+        
+        .intro-text {
+            background: #fff9e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ff9800;
+        }
+        
+        .role-selection {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .role-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            width: 220px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: #ff9800;
+        }
+        
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .role-card:nth-child(2) .role-icon {
+            background: #4caf50;
+        }
+        
+        .role-card:nth-child(3) .role-icon {
+            background: #2196f3;
+        }
+        
+        .role-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .role-desc {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .lesson {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid #ff9800;
+            width: 100%;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        
+        .option:hover {
+            background: #f8f9fa;
+            border-color: #3498db;
+        }
+        
+        .option.selected {
+            background: #d5f5e3;
+            border-color: #27ae60;
+        }
+        
+        .option.correct {
+            background: #d5f5e3;
+            border-color: #27ae60;
+        }
+        
+        .option.wrong {
+            background: #fadbd8;
+            border-color: #e74c3c;
+        }
+        
+        .eggman-tip {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #1565c0;
+        }
+        
+        .btn {
+            background: #e53935;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 20px 10px 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #c62828;
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: #ff9800;
+        }
+        
+        .btn-secondary:hover {
+            background: #f57c00;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #ecf0f1;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #e53935, #ff9800);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .eggman-character {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .eggman-icon {
+            width: 80px;
+            height: 80px;
+            background: #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .eggman-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #155724;
+        }
+        
+        .token-code {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 开场屏幕 -->
+        <div id="intro-screen" class="screen active">
+            <div class="eggman-character">
+                <div class="eggman-icon">🥚</div>
+                <div class="eggman-name">鸡蛋超人</div>
+            </div>
+            
+            <h1>鸡蛋超人无抗小课堂</h1>
+            
+            <div class="intro-text">
+                <p>你是否听说过"无抗鸡蛋"，却不太明白无抗究竟是什么，它比起普通鸡蛋到底好在哪里？</p>
+                <p>别担心，鸡蛋超人带你花3分钟，搞懂它并找到最适合你的那一款！</p>
+            </div>
+            
+            <h2>第一步：选择探索身份</h2>
+            
+            <div class="role-selection">
+                <div class="role-card" onclick="selectRole('family')">
+                    <div class="role-icon">🛡️</div>
+                    <div class="role-name">家庭安全守护者</div>
+                    <div class="role-desc">你守护家人的健康，想让每一餐都更安心</div>
+                </div>
+            </div>
+            
+            <div class="intro-text">
+                <p><strong>GitHub Pages部署成功！</strong></p>
+                <p>这个页面已经成功部署到GitHub Pages，可以通过链接分享给任何人访问。</p>
+                <p>当前URL: <span id="current-url"></span></p>
+            </div>
+        </div>
+
+        <!-- 家庭安全守护者路径 -->
+        <div id="family-path-screen" class="screen">
+            <div class="eggman-character">
+                <div class="eggman-icon">🛡️</div>
+                <div class="eggman-name">家庭安全守护者</div>
+            </div>
+            
+            <h2>路径一：家庭安全守护者的无抗安心课堂</h2>
+            <p>欢迎，守护者！你的选择是家人的第一道防线。完成学习，解锁你的"守护者勋章"！</p>
+            
+            <div class="progress-bar">
+                <div id="family-progress" class="progress" style="width: 0%"></div>
+            </div>
+            
+            <div class="lesson">
+                <h3>第一课：什么是健康蛋？</h3>
+                <p>挑选让家人安心的鸡蛋，你最应该看什么？</p>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 1, 1)">A. 是否是品牌鸡蛋</div>
+                    <div class="option" onclick="selectOption(this, 1, 2)">B. 蛋壳上有没有溯源喷码</div>
+                    <div class="option" onclick="selectOption(this, 1, 3)">C. 是否有绿色认证标识</div>
+                </div>
+                <div class="eggman-tip" id="family-tip1" style="display: none">
+                    (鸡蛋超人告诉你)：品牌蛋并不是衡量健康蛋的标准！绿色认证并不是确定健康蛋的最高安全级别！正大鸡蛋的喷码"身份证"，一扫就能看到每颗蛋的全程来源与检测报告，安全透明才是真安心。
+                </div>
+                <button class="btn btn-secondary" onclick="checkFamilyAnswer(1)" id="family-btn1" style="display: none">继续</button>
+            </div>
+            
+            <button class="btn" onclick="showIntroScreen()">返回选择</button>
+        </div>
+
+        <!-- 奖励屏幕 -->
+        <div id="reward-screen" class="screen">
+            <div class="eggman-character">
+                <div class="eggman-icon">🏆</div>
+                <div class="eggman-name">恭喜完成！</div>
+            </div>
+            
+            <h1>家庭安心守护者勋章</h1>
+            
+            <div class="success-message">
+                <p>恭喜你完成学习！你已成功掌握无抗鸡蛋知识，成为家庭健康的守护者！</p>
+            </div>
+            
+            <div class="lesson">
+                <h3>您的优惠券令牌</h3>
+                <div class="token-code" id="token-display">EGG-FAMILY-2024-ABCD1234</div>
+                <p>请保存此令牌，在购买时向工作人员出示</p>
+            </div>
+            
+            <button class="btn" onclick="restartGame()">再次挑战</button>
+            <button class="btn btn-secondary" onclick="showIntroScreen()">返回首页</button>
+        </div>
+    </div>
+
+    <script>
+        // 显示当前URL
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        // 显示开场屏幕
+        function showIntroScreen() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById('intro-screen').classList.add('active');
+        }
+        
+        // 选择角色
+        function selectRole(role) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            if (role === 'family') {
+                document.getElementById('family-path-screen').classList.add('active');
+                resetFamilyPath();
+            }
+        }
+        
+        // 重置家庭安全守护者路径
+        function resetFamilyPath() {
+            document.getElementById('family-progress').style.width = '0%';
+        }
+        
+        // 选择选项
+        function selectOption(element, lessonNum, optionNum) {
+            // 移除同一问题中其他选项的选中状态
+            const parent = element.parentElement;
+            parent.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 选中当前选项
+            element.classList.add('selected');
+            
+            // 显示提示和继续按钮
+            document.getElementById('family-tip1').style.display = 'block';
+            document.getElementById('family-btn1').style.display = 'block';
+        }
+        
+        // 检查答案
+        function checkFamilyAnswer(lessonNum) {
+            const options = document.querySelectorAll('#family-path-screen .option');
+            
+            // 显示正确反馈
+            options.forEach((option, index) => {
+                if (index === 1) { // 正确答案是B
+                    option.classList.add('correct');
+                }
+            });
+            
+            // 延迟后显示奖励
+            setTimeout(() => {
+                document.getElementById('family-path-screen').classList.remove('active');
+                document.getElementById('reward-screen').classList.add('active');
+                
+                // 生成随机令牌
+                const randomToken = 'EGG-FAMILY-' + Date.now().toString().slice(-6);
+                document.getElementById('token-display').textContent = randomToken;
+            }, 1500);
+        }
+        
+        // 重新开始游戏
+        function restartGame() {
+            showIntroScreen();
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('鸡蛋超人游戏已加载 - GitHub Pages版本');
+        });
+    </script>
+</body>
+</html>
